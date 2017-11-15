@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  ViewControllerForUIWeb.h
 //  ZKInteractionOfOCAndJS
 //
 //  Created by Zhou Kang on 2017/11/15.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ViewControllerForUIWeb : UIViewController
 
 @end
