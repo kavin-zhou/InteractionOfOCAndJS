@@ -7,13 +7,22 @@
 </head>
 <body style="font-size: 14px">
 
-<input value="Call OC" type="button">
+<input type="button" value="Open Camera" onclick="openCamera()">
+<input type="button" value="Download Image" onclick="downloadImg('http://test.png')">
 
 <script type="text/javascript">
     function alertText(text) {
         console.log(text);
         alert(text);
         return text;
+    }
+    function openCamera() {
+        // 注意 postMessage 的参数不能不传
+        window.webkit.messageHandlers.openCameraHandler.postMessage('');
+    }
+    function downloadImg(imgURL) {
+        var msg = { 'method': 'downloadImg', 'param': imgURL };
+        window.webkit.messageHandlers.downloadImgHandler.postMessage(msg)
     }
 
 </script>

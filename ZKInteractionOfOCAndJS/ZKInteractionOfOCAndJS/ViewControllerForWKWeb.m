@@ -13,7 +13,7 @@
 #define kScreenWidth  [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
-@interface ViewControllerForWKWeb () <WKUIDelegate, WKNavigationDelegate>
+@interface ViewControllerForWKWeb () <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler>
 
 @property (nonatomic, strong) WKWebView *webView;
 
@@ -32,14 +32,17 @@ static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/jsDemo_0
 
 - (void)setupBtn {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [btn setTitle:@"Call JS" forState:UIControlStateNormal];
+    [btn setTitle:@"App Call JS" forState:UIControlStateNormal];
     [self.view addSubview:btn];
     btn.frame = CGRectMake(30, 100, 100, 30);
     [btn addTarget:self action:@selector(callJS) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)setupWebView {
-    _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64.f)];
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    [config.userContentController addScriptMessageHandler:self name:@"openCameraHandler"];
+    [config.userContentController addScriptMessageHandler:self name:@"downloadImgHandler"];
+    _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64.f) configuration:config];
     [self.view insertSubview:_webView atIndex:0];
     _webView.UIDelegate = self;
     _webView.navigationDelegate = self;
@@ -83,8 +86,23 @@ static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/jsDemo_0
     [self presentViewController:alertController animated:YES completion:^{}];
 }
 
+#pragma mark - <WKScriptMessageHandler>
+
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    
+    if ([message.name isEqualToString:@"openCameraHandler"]) {
+        NSLog(@"open camera in app");
+    }
+    else if ([message.name isEqualToString:@"downloadImgHandler"]) {
+        NSDictionary *dict = (NSDictionary *)message.body;
+        NSString *methodStr = dict[@"method"];
+        NSString *paramStr = dict[@"param"];
+        NSLog(@"method: %@  param: %@", methodStr, paramStr);
+    }
+}
+
 - (void)callJS {
-    [_webView evaluateJavaScript:@"alertText('Call JS')" completionHandler:^(id _Nullable res, NSError * _Nullable error) {
+    [_webView evaluateJavaScript:@"alertText('App Call JS successfully')" completionHandler:^(id _Nullable res, NSError * _Nullable error) {
         NSLog(@"from js => %@", (NSString *)res);
     }];
 }
