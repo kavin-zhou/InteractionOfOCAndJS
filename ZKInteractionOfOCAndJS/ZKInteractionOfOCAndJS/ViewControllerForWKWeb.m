@@ -39,9 +39,11 @@ static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/jsDemo_0
 }
 
 - (void)setupWebView {
+    WKUserScript *script = [[WKUserScript alloc] initWithSource:@"document.body.style.background = '#666';" injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:true];
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
     [config.userContentController addScriptMessageHandler:self name:@"openCameraHandler"];
     [config.userContentController addScriptMessageHandler:self name:@"downloadImgHandler"];
+    [config.userContentController addUserScript:script];
     _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64.f) configuration:config];
     [self.view insertSubview:_webView atIndex:0];
     _webView.UIDelegate = self;
@@ -105,6 +107,7 @@ static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/jsDemo_0
     [_webView evaluateJavaScript:@"alertText('App Call JS successfully')" completionHandler:^(id _Nullable res, NSError * _Nullable error) {
         NSLog(@"from js => %@", (NSString *)res);
     }];
+    [_webView evaluateJavaScript:@"function changeBG(){document.body.style.background = '#999';} changeBG();" completionHandler:nil];
 }
 
 @end
