@@ -10,16 +10,13 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import <WebKit/WebKit.h>
 
-#define kScreenWidth  [UIScreen mainScreen].bounds.size.width
-#define kScreenHeight [UIScreen mainScreen].bounds.size.height
-
 @interface ViewControllerForWKWeb () <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler>
 
 @property (nonatomic, strong) WKWebView *webView;
 
 @end
 
-static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/jsDemo_0.html";
+static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/JSForWKWebView.html";
 
 @implementation ViewControllerForWKWeb
 
@@ -72,6 +69,17 @@ static NSString *const kURLStr = @"http://192.168.70.142/webapps/JSFile/jsDemo_0
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     NSLog(@"%s", __func__);
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    NSString *URLStr = navigationAction.request.URL.absoluteString;
+    if ([URLStr rangeOfString:@"login://"].location != NSNotFound) {
+        NSLog(@"login event from JS");
+        decisionHandler(WKNavigationActionPolicyCancel);
+    }
+    else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
 }
 
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {

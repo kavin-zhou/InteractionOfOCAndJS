@@ -15,6 +15,7 @@
 		58C919731FBC1557002BE101 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C919711FBC1557002BE101 /* ViewController.m */; };
 		58C919741FBC1557002BE101 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58C919721FBC1557002BE101 /* ViewController.xib */; };
 		58C919771FBC167D002BE101 /* ViewControllerForUIWeb.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C919761FBC167D002BE101 /* ViewControllerForUIWeb.m */; };
+		58C9197B1FBD693F002BE101 /* ZKObjCModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58C9197A1FBD693F002BE101 /* ZKObjCModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,9 @@
 		58C919721FBC1557002BE101 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		58C919751FBC167D002BE101 /* ViewControllerForUIWeb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewControllerForUIWeb.h; sourceTree = "<group>"; };
 		58C919761FBC167D002BE101 /* ViewControllerForUIWeb.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewControllerForUIWeb.m; sourceTree = "<group>"; };
+		58C919781FBD6024002BE101 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		58C919791FBD693F002BE101 /* ZKObjCModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZKObjCModel.h; sourceTree = "<group>"; };
+		58C9197A1FBD693F002BE101 /* ZKObjCModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZKObjCModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +74,8 @@
 				58C9195E1FBACD7D002BE101 /* ViewControllerForWKWeb.m */,
 				58C919751FBC167D002BE101 /* ViewControllerForUIWeb.h */,
 				58C919761FBC167D002BE101 /* ViewControllerForUIWeb.m */,
+				58C919791FBD693F002BE101 /* ZKObjCModel.h */,
+				58C9197A1FBD693F002BE101 /* ZKObjCModel.m */,
 				58C919701FBC1557002BE101 /* ViewController.h */,
 				58C919711FBC1557002BE101 /* ViewController.m */,
 				58C919721FBC1557002BE101 /* ViewController.xib */,
@@ -77,6 +83,7 @@
 				58C919651FBACD7D002BE101 /* LaunchScreen.storyboard */,
 				58C919681FBACD7D002BE101 /* Info.plist */,
 				58C919691FBACD7D002BE101 /* main.m */,
+				58C919781FBD6024002BE101 /* PrefixHeader.pch */,
 			);
 			path = ZKInteractionOfOCAndJS;
 			sourceTree = "<group>";
@@ -152,6 +159,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58C9197B1FBD693F002BE101 /* ZKObjCModel.m in Sources */,
 				58C9195F1FBACD7D002BE101 /* ViewControllerForWKWeb.m in Sources */,
 				58C9196A1FBACD7D002BE101 /* main.m in Sources */,
 				58C919731FBC1557002BE101 /* ViewController.m in Sources */,
@@ -284,6 +292,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TE2958KSXV;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PrefixHeader.pch";
 				INFOPLIST_FILE = ZKInteractionOfOCAndJS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -299,6 +308,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TE2958KSXV;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PrefixHeader.pch";
 				INFOPLIST_FILE = ZKInteractionOfOCAndJS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

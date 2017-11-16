@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum=1, user-scalable=no">
-    <title>ZKTestForInteraction</title>
+    <title>JSForWKWebView</title>
 </head>
 <body style="font-size: 14px">
 
 <input type="button" value="Open Camera" onclick="openCamera()">
 <input type="button" value="Download Image" onclick="downloadImg('http://test.png')">
+<input type="button" value="jumpToLoginPage" onclick="jumpToLoginPage()">
 
 <script type="text/javascript">
+    console.log(navigator.userAgent);
+
     function alertText(text) {
         console.log(text);
         alert(text);
@@ -25,6 +28,10 @@
         window.webkit.messageHandlers.downloadImgHandler.postMessage(msg);
     }
 
+    function jumpToLoginPage() {
+        location.href = 'login://';
+        // window.open('login://');
+    }
 </script>
 
 </body>
