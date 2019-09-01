@@ -4,16 +4,16 @@
 ```
 // code in App
 - (void)callJS {
-[_webView evaluateJavaScript:@"alertText('Call JS')" completionHandler:^(id _Nullable res, NSError * _Nullable error) {
-NSLog(@"from js => %@", (NSString *)res);
-}];
+    [_webView evaluateJavaScript:@"alertText('Call JS')" completionHandler:^(id _Nullable res, NSError * _Nullable error) {
+        NSLog(@"from js => %@", (NSString *)res);
+    }];
 }
 
 // code in JS
 function alertText(text) {
-console.log(text);
-alert(text);
-return text;
+    console.log(text);
+    alert(text);
+    return text;
 }
 ```
 如果想用 App 插入 JS 一段代码，例如改变背景色，上面这种解决方法就可以。如下：
@@ -35,8 +35,8 @@ _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScr
 ```
 // code in JS
 function jumpToLoginPage() {
-location.href = 'login://';
-// window.open('login://');
+    location.href = 'login://';
+    // window.open('login://');
 }
 ```
 ##### 2、WK 的 `WKScriptMessageHandler`
@@ -50,16 +50,16 @@ WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
 2、App 实现<WKScriptMessageHandler>代理方法，即`didReceiveScriptMessage:`
 ```
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
-
-if ([message.name isEqualToString:@"openCameraHandler"]) {
-NSLog(@"open camera in app");
-}
-else if ([message.name isEqualToString:@"downloadImgHandler"]) {
-NSDictionary *dict = (NSDictionary *)message.body;
-NSString *methodStr = dict[@"method"];
-NSString *paramStr = dict[@"param"];
-NSLog(@"method: %@  param: %@", methodStr, paramStr);
-}
+    
+    if ([message.name isEqualToString:@"openCameraHandler"]) {
+        NSLog(@"open camera in app");
+    }
+    else if ([message.name isEqualToString:@"downloadImgHandler"]) {
+        NSDictionary *dict = (NSDictionary *)message.body;
+        NSString *methodStr = dict[@"method"];
+        NSString *paramStr = dict[@"param"];
+        NSLog(@"method: %@  param: %@", methodStr, paramStr);
+    }
 }
 ```
 
@@ -80,14 +80,14 @@ JavaScriptCore 一个 iOS7 引进的标准库。下面就来使用一个这个�
 // code in js
 <script type="text/javascript">
 function alertMsg(text) {
-alert(text);
+    alert(text);
 }
 </script>
 // code in iOS
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-NSLog(@"%s", __func__);
-// 先获取到上下文环境，这样才能拿到 JS 中的全局函数或者属性进行操作
-_jsContent = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    NSLog(@"%s", __func__);
+    // 先获取到上下文环境，这样才能拿到 JS 中的全局函数或者属性进行操作
+    _jsContent = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
 }
 // 然后通过 JSValue 进行函数的调用，如下
 JSValue *alertFunc = _jsContent[@"alertMsg"];
@@ -104,17 +104,17 @@ JSValue *alertFunc = _jsContent[@"alertMsg"];
 
 // code in oc
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-NSLog(@"%s", __func__);
-// 注意这种获取 JSContext 的方法在 WKWebView 中就不能用了。替换方法详见见 WKWebView 中 的 userContentController。
-_jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-[self injectMethodsIntoJS];
+    NSLog(@"%s", __func__);
+    // 注意这种获取 JSContext 的方法在 WKWebView 中就不能用了。替换方法详见见 WKWebView 中 的 userContentController。
+    _jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    [self injectMethodsIntoJS];
 }
 /** 通过注入函数来完成 JS 调用 App */
 - (void)injectMethodsIntoJS {
-_jsContext[@"callOCWithBlock"] = ^() {
-NSArray *args = [JSContext currentArguments];
-NSLog(@"JS Call OC with args ==> %@", args);
-};
+    _jsContext[@"callOCWithBlock"] = ^() {
+        NSArray *args = [JSContext currentArguments];
+        NSLog(@"JS Call OC with args ==> %@", args);
+    };
 }
 ```
 这种方式是没有注入模型到 JS 中的。这种方式使用起来不太合适，通常在 JS 中有很多全局的函数，为了防止名字重名，使用模型的方式是最好不过了。通过我们协商好的模型名称，在 JS 中直接通过模型来调用我们在 ObjC 中所定义的模型所公开的 API。
@@ -136,26 +136,26 @@ NSLog(@"JS Call OC with args ==> %@", args);
 
 @implementation ZKObjCModel
 - (void)callCamera {
-NSLog(@"打开系统相册");
+    NSLog(@"打开系统相册");
 }
 - (void)callOCWithParams:(NSDictionary *)params {
-NSLog(@"%s with %@", __func__, params);
+    NSLog(@"%s with %@", __func__, params);
 }
 @end
 ```
 然后在`webViewDidFinishLoad`中注入模型
 ```
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-NSLog(@"%s", __func__);
-// 注意这种获取 JSContext 的方法在 WKWebView 中就不能用了。替换方法详见见 WKWebView 中 的 userContentController。
-_jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-ZKObjCModel *model = [ZKObjCModel new];
-_jsContext[@"ZKModel"] = model;
-
-[_jsContext setExceptionHandler:^(JSContext *context, JSValue *exception) {
-context.exception = exception;
-NSLog(@"%@", exception);
-}];
+    NSLog(@"%s", __func__);
+    // 注意这种获取 JSContext 的方法在 WKWebView 中就不能用了。替换方法详见见 WKWebView 中 的 userContentController。
+    _jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    ZKObjCModel *model = [ZKObjCModel new];
+    _jsContext[@"ZKModel"] = model;
+    
+    [_jsContext setExceptionHandler:^(JSContext *context, JSValue *exception) {
+        context.exception = exception;
+        NSLog(@"%@", exception);
+    }];
 }
 ```
 最后，在 Web 端直接调用即可
@@ -163,4 +163,3 @@ NSLog(@"%@", exception);
 <input type="button" value="callOCWithModel0" onclick="ZKModel.callCamera()">
 <input type="button" value="callOCWithModel1" onclick="ZKModel.callOCWithParams({'name':'zhoujielun'})">
 ```
-
